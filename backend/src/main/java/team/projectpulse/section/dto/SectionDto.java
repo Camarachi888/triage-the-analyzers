@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public record SectionDto(Integer sectionId,
@@ -29,4 +31,9 @@ public record SectionDto(Integer sectionId,
                          DayOfWeek peerEvaluationWeeklyDueDay,
                          @NotEmpty(message = "Peer evaluation due time is required.")
                          String peerEvaluationDueTime) {
+    public SectionDto {
+        activeWeeks = activeWeeks == null
+                ? null
+                : Collections.unmodifiableList(new ArrayList<>(activeWeeks));
+    }
 }

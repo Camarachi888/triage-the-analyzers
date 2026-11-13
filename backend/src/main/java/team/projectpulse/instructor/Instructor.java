@@ -30,6 +30,7 @@ public class Instructor extends PeerEvaluationUser {
 
 
     public Instructor() {
+        // Required by JPA to instantiate entities when loading persistent state.
     }
 
     public Instructor(String username, String firstName, String lastName, String email, String password, boolean enabled, String roles) {
