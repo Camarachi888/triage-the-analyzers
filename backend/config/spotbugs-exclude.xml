@@ -7,4 +7,69 @@
 
      Unlike the baseline, this file may grow, but every entry is a reviewed decision. -->
 <FindBugsFilter>
+  <!-- Reviewed constructor-injected Spring dependencies intentionally retain shared
+       bean references. Restrict this decision to these class/field pairs and
+       constructor assignments; mutable data constructors remain checked. -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Method name="&lt;init&gt;"/>
+    <Or>
+      <And><Class name="team.projectpulse.activity.ActivityController"/><Field name="activityService"/></And>
+      <And><Class name="team.projectpulse.course.CourseController"/><Field name="courseService"/></And>
+      <And><Class name="team.projectpulse.evaluation.EvaluationController"/><Field name="evaluationService"/></And>
+      <And><Class name="team.projectpulse.instructor.InstructorController"/><Field name="instructorService"/></And>
+      <And><Class name="team.projectpulse.instructor.InstructorService"/><Field name="userInvitationService"/></And>
+      <And><Class name="team.projectpulse.notification.ReminderController"/><Field name="sectionService"/></And>
+      <And><Class name="team.projectpulse.notification.SubmissionStatusService"/><Field name="~(activityService|evaluationService)"/></And>
+      <And><Class name="team.projectpulse.notification.WeeklyReminderScheduler"/><Field name="sectionService"/></And>
+      <And><Class name="team.projectpulse.ram.collaboration.CommentController"/><Field name="commentService"/></And>
+      <And><Class name="team.projectpulse.ram.document.DocumentSectionService"/><Field name="requirementArtifactService"/></And>
+      <And><Class name="team.projectpulse.ram.glossary.GlossaryService"/><Field name="requirementArtifactService"/></And>
+      <And><Class name="team.projectpulse.ram.requirement.ArtifactLinkController"/><Field name="artifactLinkService"/></And>
+      <And><Class name="team.projectpulse.ram.requirement.RequirementArtifactController"/><Field name="requirementArtifactService"/></And>
+      <And><Class name="team.projectpulse.ram.usecase.UseCaseService"/><Field name="requirementArtifactService"/></And>
+      <And><Class name="team.projectpulse.rubric.CriterionController"/><Field name="criterionService"/></And>
+      <And><Class name="team.projectpulse.rubric.RubricController"/><Field name="rubricService"/></And>
+      <And><Class name="team.projectpulse.section.SectionController"/><Field name="~(sectionService|userInvitationService)"/></And>
+      <And><Class name="team.projectpulse.section.SectionService"/><Field name="userInvitationService"/></And>
+      <And><Class name="team.projectpulse.seed.DataInitializer"/><Field name="requirementArtifactService"/></And>
+      <And><Class name="team.projectpulse.student.StudentController"/><Field name="studentService"/></And>
+      <And><Class name="team.projectpulse.student.StudentService"/><Field name="userInvitationService"/></And>
+      <And><Class name="team.projectpulse.team.TeamController"/><Field name="teamService"/></And>
+      <And><Class name="team.projectpulse.user.UserController"/><Field name="resetPasswordService"/></And>
+      <And><Class name="team.projectpulse.user.UserService"/><Field name="resetPasswordService"/></And>
+      <And><Class name="team.projectpulse.user.resetpassword.ResetPasswordService"/><Field name="resetPasswordTokenRepository"/></And>
+    </Or>
+  </Match>
+
+  <!-- Team and Instructor intentionally share the same entity instance:
+       addInstructor updates both Team.instructor and Instructor.teams. -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"/>
+    <Class name="team.projectpulse.team.Team"/>
+    <Method name="getInstructor" params="" returns="team.projectpulse.instructor.Instructor"/>
+    <Field name="instructor"/>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Class name="team.projectpulse.team.Team"/>
+    <Method name="addInstructor" params="team.projectpulse.instructor.Instructor" returns="void"/>
+    <Field name="instructor"/>
+  </Match>
+
+  <!-- Team transfers require Section reference identity: transferTeam compares
+       team.getSection() != from, updates both sections' inverse collections,
+       and assigns the same destination Section to the team and its students. -->
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"/>
+    <Class name="team.projectpulse.team.Team"/>
+    <Method name="getSection" params="" returns="team.projectpulse.section.Section"/>
+    <Field name="section"/>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+    <Class name="team.projectpulse.team.Team"/>
+    <Method name="setSection" params="team.projectpulse.section.Section" returns="void"/>
+    <Field name="section"/>
+  </Match>
 </FindBugsFilter>

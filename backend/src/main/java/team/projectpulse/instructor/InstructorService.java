@@ -100,6 +100,10 @@ public class InstructorService {
         return savedInstructor;
     }
 
+    // Basic auth uses MyUserPrincipal; JWT auth uses SecurityConfiguration's JwtGrantedAuthoritiesConverter.
+    // Both create SimpleGrantedAuthority values, whose constructor rejects null/blank authority strings.
+    // Revisit this assumption if another GrantedAuthority implementation is added to an authentication path.
+    @SuppressWarnings("PMD.LiteralsFirstInComparisons")
     public Instructor updateInstructor(Integer instructorId, Instructor update) {
         Instructor oldInstructor = this.instructorRepository.findById(instructorId)
                 .orElseThrow(() -> new ObjectNotFoundException("instructor", instructorId));

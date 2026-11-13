@@ -37,6 +37,8 @@ public class InstructorSecurityService {
      * @param instructorId the id of the instructor we need to access, this is NOT the current user's ID
      * @return
      */
+    // Keep the explicit deny-on-missing-instructor guard visible in this authorization check.
+    @SuppressWarnings("PMD.SimplifyBooleanReturns")
     public boolean isCurrentUserAdminOfInstructorCourse(Integer instructorId) {
         Integer adminIdFromJwt = this.userUtils.getUserId();
         Instructor instructor = this.instructorRepository.findById(instructorId).orElse(null);

@@ -36,6 +36,7 @@ public class PeerEvaluation {
 
 
     public PeerEvaluation() {
+        // Required by JPA to instantiate entities when loading persistent state.
     }
 
     public PeerEvaluation(String week, Student evaluator, Student evaluatee, List<Rating> ratings, String publicComment, String privateComment) {

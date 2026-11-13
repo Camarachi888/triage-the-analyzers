@@ -19,6 +19,7 @@ public class UseCaseExtensionStep {
 
 
     public UseCaseExtensionStep() {
+        // Required by JPA to instantiate entities when loading persistent state.
     }
 
     public UseCaseExtensionStep(String actor, String actionText) {
