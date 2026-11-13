@@ -14,7 +14,7 @@ public class CourseSpecs {
 
     public static Specification<Course> containsCourseDescription(String providedCourseDescription) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("courseDescription")), "%" + providedCourseDescription.toLowerCase() + "%");
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("courseDescription")), "%" + providedCourseDescription.toLowerCase(Locale.ROOT) + "%");
     }
 
     public static Specification<Course> hasInstructor(Instructor instructor) {
